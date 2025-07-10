@@ -1,0 +1,108 @@
+{
+  "project_type": "ai-docs-enhanced",
+  "description": "Project template that includes AI documentation patterns and worktree-optimized structure",
+  "base_branch": "main",
+  "enable_hooks": true,
+  "features": {
+    "ai_docs": true,
+    "issue_tracking": true,
+    "automated_context": true,
+    "git_hooks": true
+  },
+  "directories": {
+    "required": [
+      "ai_docs",
+      "ai_docs/architecture", 
+      "ai_docs/decisions",
+      "ai_docs/planning",
+      "ai_docs/context"
+    ],
+    "optional": [
+      "ai_docs/prompts",
+      "ai_docs/lessons-learnt",
+      "ai_docs/performance",
+      "ai_docs/migrations"
+    ]
+  },
+  "files": {
+    "ai_docs/README.md": {
+      "template": "examples/ai-docs-templates/README.md",
+      "required": true
+    },
+    "ai_docs/project-overview.md": {
+      "content": "# {{PROJECT_NAME}} - Project Overview\n\n## Purpose\n\nBrief description of project goals and scope.\n\n## Architecture\n\nHigh-level architectural decisions and patterns.\n\n## Current Status\n\n- [ ] Initial setup complete\n- [ ] Core architecture defined\n- [ ] Development workflow established\n\n## Next Steps\n\n1. Define detailed requirements\n2. Set up development environment\n3. Begin implementation\n\n## Resources\n\n- Repository: {{REPO_URL}}\n- Issues: {{REPO_URL}}/issues\n- Documentation: ./ai_docs/\n",
+      "required": true
+    },
+    "ai_docs/decisions/001-worktree-setup.md": {
+      "content": "# ADR 001: Git Worktree Development Setup\n\n## Status\nAccepted\n\n## Context\nNeed to establish efficient development workflow for {{PROJECT_NAME}} that supports:\n- Parallel feature development\n- Context switching between branches\n- Automated tooling and hooks\n\n## Decision\nImplement Git worktree-based development environment using standardized toolkit.\n\n## Consequences\n\n### Positive\n- Multiple branches can be worked on simultaneously\n- Faster context switching\n- Consistent automation across all branches\n- Isolated build environments\n\n### Negative\n- Learning curve for team members unfamiliar with worktrees\n- Additional disk space usage\n- More complex initial setup\n\n## Implementation\n- Use worktree-setup-toolkit for standardized setup\n- Establish consistent directory structure\n- Implement automated Git hooks for quality assurance\n",
+      "required": true
+    }
+  },
+  "ignore_patterns": [
+    "ai_docs/**/*.tmp",
+    "ai_docs/**/draft-*",
+    "ai_docs/**/*.backup"
+  ],
+  "git_hooks": {
+    "pre-commit": [
+      "validate_ai_docs_structure",
+      "check_decision_record_format"
+    ],
+    "post-checkout": [
+      "update_ai_context_for_branch"
+    ],
+    "post-merge": [
+      "regenerate_project_overview"
+    ]
+  },
+  "build_targets": {
+    "docs": {
+      "command": "generate_documentation",
+      "description": "Generate consolidated documentation from ai_docs/"
+    },
+    "context": {
+      "command": "update_ai_context", 
+      "description": "Update AI context files for current branch"
+    }
+  },
+  "validation": {
+    "required_files": [
+      "ai_docs/README.md",
+      "ai_docs/project-overview.md"
+    ],
+    "structure_checks": [
+      "ai_docs_directory_exists",
+      "decision_records_numbered_sequentially",
+      "project_overview_updated_recently"
+    ]
+  },
+  "automation": {
+    "context_generation": {
+      "enabled": true,
+      "triggers": ["branch_switch", "rule_change", "doc_update"],
+      "output_file": "CLAUDE.md"
+    },
+    "issue_linking": {
+      "enabled": true,
+      "auto_reference": true,
+      "branch_naming": "feature/<description>-issue-<number>"
+    }
+  },
+  "examples": {
+    "copy_from": "examples/ai-docs-templates/",
+    "include": [
+      "git-hooks/",
+      "backend-architecture-plan/",
+      "performance/"
+    ]
+  },
+  "setup_steps": [
+    "create_directory_structure",
+    "copy_template_files", 
+    "customize_project_specific_content",
+    "setup_git_hooks",
+    "initialize_ai_docs_structure",
+    "create_initial_decision_record",
+    "generate_initial_context"
+  ]
+} 

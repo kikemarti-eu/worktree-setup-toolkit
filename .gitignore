@@ -1,0 +1,174 @@
+# === WORKTREE SETUP TOOLKIT .gitignore ===
+# This .gitignore automatically excludes bare repositories and worktrees
+# while preserving the toolkit files that should be versioned
+
+# === BARE REPOSITORIES (*.git/) ===
+# Exclude any bare Git repositories
+*.git/
+QuixoticWhisper.git/
+
+# === WORKTREE DIRECTORIES ===
+# Common worktree directory patterns
+main/
+develop/
+staging/
+release/
+
+# Feature branches
+feature/
+features/
+feat/
+
+# Fix branches  
+fix/
+fixes/
+bugfix/
+hotfix/
+
+# Performance branches
+performance/
+perf/
+optimization/
+
+# Experimental branches
+experimental/
+experiment/
+test/
+testing/
+
+# === PROJECT BUILD ARTIFACTS ===
+# Flutter build outputs
+**/build/
+**/.dart_tool/
+**/pubspec.lock
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+
+# Node.js
+**/node_modules/
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+
+# Python
+**/__pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+**/.Python
+**/env/
+**/venv/
+**/.venv/
+
+# Rust
+**/target/
+**/Cargo.lock
+
+# Go
+**/vendor/
+
+# === COMMON BUILD/TMP DIRECTORIES ===
+build/
+dist/
+tmp/
+temp/
+cache/
+
+# === IDE & EDITOR FILES ===
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# === LOG & BACKUP FILES ===
+*.log
+*.backup
+*.bak
+*-backup-*
+
+# === PRESERVE TOOLKIT FILES ===
+# Explicitly include important toolkit files
+!README.md
+!SETUP.md
+!WORKTREE_GUIDE.md
+!GIT_WORKTREES_SETUP_PROMPT.md
+
+# Scripts directory
+!scripts/
+!scripts/**
+
+# Documentation
+!docs/
+!docs/**
+!ai_docs/
+!ai_docs/**
+
+# Templates and examples
+!templates/
+!templates/**
+!examples/
+!examples/**
+
+# Git hooks templates
+!hooks-templates/
+!hooks-templates/**
+!.githooks/
+!.githooks/**
+
+# Configuration files
+!*.json
+!*.yaml
+!*.yml
+!*.toml
+!*.ini
+!*.conf
+
+# Shell scripts (but not in excluded directories)
+!*.sh
+
+# Markdown files
+!*.md
+
+# === OS SPECIFIC ===
+# Windows
+*.exe
+*.dll
+*.pdb
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Linux
+*.so
+*.a
+
+# === VERSION CONTROL ===
+# Ignore nested git repos (except our templates)
+**/.git
+!templates/**/.git
+!examples/**/.git
+
+# === ADDITIONAL EXCLUSIONS ===
+# Temporary project directories that might be created during setup
+workspace/
+projects/
+repos/
+
+# Common backup directory names
+backups/
+backup-*/
+*-backup/
+
+# === SMART PATTERNS ===
+# Exclude anything that looks like a date-based backup
+*-20[0-9][0-9]*-*
+*_20[0-9][0-9]*_*
+
+# Exclude worktree metadata that might leak
+.git/worktrees/
+worktrees/ 

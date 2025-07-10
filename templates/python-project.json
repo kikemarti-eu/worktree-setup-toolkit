@@ -1,0 +1,148 @@
+{
+  "project_type": "python",
+  "name": "Python Project Template",
+  "description": "Modern Python development environment with virtual environment support",
+  "version": "1.0.0",
+  
+  "worktree_structure": {
+    "main": {
+      "description": "Main production branch",
+      "protected": true
+    },
+    "develop": {
+      "description": "Development integration branch",
+      "protected": false
+    },
+    "feature/": {
+      "description": "Feature development branches",
+      "pattern": "feature/*",
+      "auto_create": true
+    },
+    "hotfix/": {
+      "description": "Production hotfix branches",
+      "pattern": "hotfix/*", 
+      "auto_create": true
+    }
+  },
+  
+  "build_targets": {
+    "development": {
+      "command": "python -m pip install -e .",
+      "description": "Development installation"
+    },
+    "wheel": {
+      "command": "python -m build --wheel",
+      "output_path": "dist/",
+      "description": "Build wheel package"
+    },
+    "sdist": {
+      "command": "python -m build --sdist", 
+      "output_path": "dist/",
+      "description": "Build source distribution"
+    }
+  },
+  
+  "virtual_environment": {
+    "venv": {
+      "create": "python -m venv venv",
+      "activate": "source venv/bin/activate",
+      "deactivate": "deactivate"
+    },
+    "conda": {
+      "create": "conda create -n project_env python=3.9",
+      "activate": "conda activate project_env",
+      "deactivate": "conda deactivate"
+    },
+    "poetry": {
+      "create": "poetry env use python3.9",
+      "activate": "poetry shell",
+      "install": "poetry install"
+    }
+  },
+  
+  "development_tools": {
+    "install": "pip install -e .",
+    "test": "pytest",
+    "lint": "flake8 src/",
+    "format": "black src/",
+    "type_check": "mypy src/",
+    "clean": "rm -rf build/ dist/ *.egg-info/"
+  },
+  
+  "git_hooks": {
+    "pre-commit": {
+      "enabled": true,
+      "commands": [
+        "black --check src/",
+        "flake8 src/",
+        "pytest tests/"
+      ]
+    },
+    "commit-msg": {
+      "enabled": true,
+      "validate_conventional_commits": true
+    },
+    "post-checkout": {
+      "enabled": true,
+      "commands": [
+        "pip install -e ."
+      ]
+    }
+  },
+  
+  "ignore_patterns": [
+    "__pycache__/",
+    "*.pyc",
+    "*.pyo", 
+    "*.pyd",
+    ".Python",
+    "env/",
+    "venv/",
+    ".venv/",
+    "build/",
+    "dist/",
+    "*.egg-info/",
+    ".pytest_cache/",
+    ".coverage",
+    ".mypy_cache/"
+  ],
+  
+  "quality_checks": {
+    "black": {
+      "command": "black --check src/",
+      "required": true
+    },
+    "flake8": {
+      "command": "flake8 src/",
+      "required": true
+    },
+    "pytest": {
+      "command": "pytest tests/",
+      "required": true
+    },
+    "mypy": {
+      "command": "mypy src/",
+      "required": false
+    }
+  },
+  
+  "environment": {
+    "python_version": ">=3.8",
+    "pip_version": ">=21.0"
+  },
+  
+  "common_dependencies": {
+    "development": [
+      "pytest",
+      "black", 
+      "flake8",
+      "mypy",
+      "pre-commit"
+    ],
+    "build": [
+      "build",
+      "wheel",
+      "setuptools"
+    ]
+  }
+} 

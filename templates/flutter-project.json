@@ -1,0 +1,139 @@
+{
+  "project_type": "flutter",
+  "name": "Flutter Project Template",
+  "description": "Complete Flutter development environment with cross-platform build support",
+  "version": "1.0.0",
+  
+  "worktree_structure": {
+    "main": {
+      "description": "Main development branch",
+      "protected": true
+    },
+    "develop": {
+      "description": "Development integration branch", 
+      "protected": false
+    },
+    "feature/": {
+      "description": "Feature development branches",
+      "pattern": "feature/*",
+      "auto_create": true
+    },
+    "hotfix/": {
+      "description": "Production hotfix branches",
+      "pattern": "hotfix/*",
+      "auto_create": true
+    },
+    "performance/": {
+      "description": "Performance optimization branches",
+      "pattern": "performance/*",
+      "auto_create": true
+    }
+  },
+  
+  "build_targets": {
+    "linux": {
+      "command": "flutter build linux",
+      "output_path": "build/linux/x64/release/bundle",
+      "binary_name": "app_name",
+      "requirements": ["flutter", "cmake", "ninja-build"]
+    },
+    "windows": {
+      "command": "flutter build windows", 
+      "output_path": "build/windows/x64/runner/Release",
+      "binary_name": "app_name.exe",
+      "requirements": ["flutter", "visual-studio"]
+    },
+    "android": {
+      "command": "flutter build apk --release",
+      "output_path": "build/app/outputs/flutter-apk",
+      "binary_name": "app-release.apk",
+      "requirements": ["flutter", "android-sdk"]
+    },
+    "web": {
+      "command": "flutter build web",
+      "output_path": "build/web", 
+      "binary_name": "index.html",
+      "requirements": ["flutter"]
+    }
+  },
+  
+  "development_tools": {
+    "hot_reload": "flutter run",
+    "test": "flutter test",
+    "analyze": "flutter analyze",
+    "format": "dart format .",
+    "clean": "flutter clean",
+    "doctor": "flutter doctor"
+  },
+  
+  "git_hooks": {
+    "pre-commit": {
+      "enabled": true,
+      "commands": [
+        "dart format --set-exit-if-changed .",
+        "flutter analyze",
+        "flutter test"
+      ]
+    },
+    "commit-msg": {
+      "enabled": true,
+      "validate_conventional_commits": true
+    },
+    "post-checkout": {
+      "enabled": true,
+      "commands": [
+        "flutter pub get"
+      ]
+    }
+  },
+  
+  "ignore_patterns": [
+    ".dart_tool/",
+    "build/",
+    ".flutter-plugins",
+    ".flutter-plugins-dependencies",
+    "pubspec.lock",
+    "*.g.dart",
+    "*.freezed.dart"
+  ],
+  
+  "quality_checks": {
+    "dart_format": {
+      "command": "dart format --set-exit-if-changed .",
+      "required": true
+    },
+    "flutter_analyze": {
+      "command": "flutter analyze",
+      "required": true
+    },
+    "flutter_test": {
+      "command": "flutter test",
+      "required": false
+    },
+    "dependency_check": {
+      "command": "flutter pub deps",
+      "required": false
+    }
+  },
+  
+  "environment": {
+    "flutter_version": ">=3.0.0",
+    "dart_version": ">=2.17.0"
+  },
+  
+  "scripts": {
+    "setup": [
+      "flutter pub get",
+      "flutter precache"
+    ],
+    "clean_build": [
+      "flutter clean",
+      "flutter pub get"
+    ],
+    "full_test": [
+      "flutter analyze",
+      "flutter test",
+      "flutter test integration_test"
+    ]
+  }
+} 
