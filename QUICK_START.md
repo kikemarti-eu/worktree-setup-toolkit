@@ -23,6 +23,20 @@ cd ../my-flutter-project
 ./create-feature.sh feature/awesome-new-feature
 ```
 
+## 🏠 In-Place Setup (New!)
+
+```bash
+# 1. Clone this toolkit
+git clone https://github.com/your-username/worktree-setup-toolkit.git
+cd worktree-setup-toolkit
+
+# 2. Setup worktrees in current directory
+./scripts/setup-project.sh https://github.com/org/repo.git --in-place
+
+# 3. Start working immediately!
+./create-feature.sh feature/awesome-new-feature
+```
+
 **That's it!** You now have a professional worktree-based development environment.
 
 ## 🎯 Common Use Cases

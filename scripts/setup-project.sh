@@ -41,15 +41,16 @@ show_usage() {
     cat << EOF
 Git Worktree Setup Toolkit - Universal Project Setup
 
-Usage: $0 <repo-url> <project-name> [options]
+Usage: $0 <repo-url> [project-name] [options]
 
 Arguments:
   repo-url       Git repository URL (HTTPS or SSH)
-  project-name   Name for the local project directory
+  project-name   Name for the local project directory (optional with --in-place)
 
 Options:
   --base-branch BRANCH    Base branch to create main worktree from (default: main)
   --config PATH           Path to project template config file
+  --in-place             Setup worktrees in current directory
   --dry-run              Show what would be done without executing
   --skip-hooks           Skip Git hooks installation
   --help                 Show this help message
@@ -58,6 +59,7 @@ Examples:
   $0 https://github.com/flutter/gallery.git flutter-demo
   $0 git@github.com:org/project.git my-project --base-branch develop
   $0 https://github.com/org/node-app.git node-demo --config templates/node-project.json
+  $0 https://github.com/org/repo.git --in-place
 
 Project Templates:
 $(find "$TOOLKIT_ROOT/templates" -name "*.json" 2>/dev/null | sed 's|.*/||; s|\.json$||' | sed 's/^/  /')
@@ -72,6 +74,7 @@ BASE_BRANCH="main"
 CONFIG_FILE=""
 DRY_RUN=false
 SKIP_HOOKS=false
+IN_PLACE=false
 
 while [[ $# -gt 0 ]]; do
     case "$1" in
@@ -89,6 +92,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         --skip-hooks)
             SKIP_HOOKS=true
+            shift
+            ;;
+        --in-place)
+            IN_PLACE=true
             shift
             ;;
         -h|--help)
@@ -116,8 +123,14 @@ while [[ $# -gt 0 ]]; do
 done
 
 # Validate required arguments
-if [[ -z "$REPO_URL" || -z "$PROJECT_NAME" ]]; then
-    print_error "Missing required arguments"
+if [[ -z "$REPO_URL" ]]; then
+    print_error "Repository URL is required"
+    show_usage
+    exit 1
+fi
+
+if [[ "$IN_PLACE" == "false" && -z "$PROJECT_NAME" ]]; then
+    print_error "Project name is required unless using --in-place"
     show_usage
     exit 1
 fi
@@ -130,9 +143,17 @@ fi
 
 # === MAIN SETUP PROCESS ===
 PLATFORM=$(detect_platform)
-PARENT_DIR="$(dirname "$TOOLKIT_ROOT")"
-PROJECT_PATH="$PARENT_DIR/$PROJECT_NAME"
-BARE_REPO_NAME="${PROJECT_NAME}.git"
+
+if [[ "$IN_PLACE" == "true" ]]; then
+    PROJECT_PATH="$(pwd)"
+    # Extract repo name from URL for bare repo naming
+    REPO_NAME=$(basename "$REPO_URL" .git)
+    BARE_REPO_NAME="${REPO_NAME}.git"
+else
+    PARENT_DIR="$(dirname "$TOOLKIT_ROOT")"
+    PROJECT_PATH="$PARENT_DIR/$PROJECT_NAME"
+    BARE_REPO_NAME="${PROJECT_NAME}.git"
+fi
 BARE_REPO_PATH="$PROJECT_PATH/$BARE_REPO_NAME"
 
 print_step "Setting up Git Worktree environment for: $PROJECT_NAME"
@@ -158,21 +179,25 @@ fi
 GIT_VERSION=$(git --version | sed 's/git version //')
 print_info "Git version: $GIT_VERSION"
 
-# Check if target directory already exists
-if [[ -d "$PROJECT_PATH" ]]; then
+# Check if target directory already exists (skip for in-place)
+if [[ "$IN_PLACE" == "false" && -d "$PROJECT_PATH" ]]; then
     print_error "Target directory already exists: $PROJECT_PATH"
     print_info "Please choose a different project name or remove the existing directory"
     exit 1
 fi
 
 # === STEP 2: CREATE PROJECT DIRECTORY ===
-print_step "Creating project directory structure..."
-
-if [[ "$DRY_RUN" == "false" ]]; then
-    mkdir -p "$PROJECT_PATH"
-    cd "$PROJECT_PATH"
+if [[ "$IN_PLACE" == "false" ]]; then
+    print_step "Creating project directory structure..."
+    
+    if [[ "$DRY_RUN" == "false" ]]; then
+        mkdir -p "$PROJECT_PATH"
+        cd "$PROJECT_PATH"
+    else
+        print_info "[DRY RUN] Would create: $PROJECT_PATH"
+    fi
 else
-    print_info "[DRY RUN] Would create: $PROJECT_PATH"
+    print_step "Setting up in current directory: $PROJECT_PATH"
 fi
 
 # === STEP 3: CLONE AS BARE REPOSITORY ===

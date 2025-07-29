@@ -93,6 +93,9 @@ Pre-configured templates for common project types:
 # Example: Setup with AI documentation patterns
 ./scripts/setup-project.sh https://github.com/org/repo.git smart-project \
   --config templates/ai-docs-project.json
+
+# Example: Setup in current directory (no new project folder)
+./scripts/setup-project.sh https://github.com/org/repo.git --in-place
 ```
 
 ### Method 2: Manual Setup (Advanced Users)
@@ -128,6 +131,9 @@ cp scripts/*.sh ./
 
 # Dry run (preview only)
 ./scripts/setup-project.sh <repo-url> <project> --dry-run
+
+# Setup in current directory instead of creating new project folder
+./scripts/setup-project.sh <repo-url> --in-place
 ```
 
 ### Advanced Configuration
